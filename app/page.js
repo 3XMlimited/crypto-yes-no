@@ -105,10 +105,16 @@ export default function Home() {
   const [color, setColor] = useState("black");
   const [dvol, setDvol] = useState("");
   const [aB, setAB] = useState([]);
+  const [symbol, setSymbol] = useState("BTC");
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/polymarket");
+      const response = await fetch("/api/polymarket", {
+        method: "POST",
+        body: JSON.stringify({
+          coin: symbol,
+        }),
+      });
       const data = await response.json();
       // console.log(data);
       let result = data.orderbook;
@@ -150,7 +156,7 @@ export default function Home() {
     return () => {
       clearInterval(intervalId); //This is important
     };
-  }, []);
+  }, [symbol]);
 
   useEffect(() => {
     if (price > old_price) {
@@ -165,7 +171,35 @@ export default function Home() {
 
   return (
     <div className="m-12">
-      <div className="flex justify-between">
+      <div className="flex justify-start fixed top-[10px]">
+        <div className="flex justify-between w-full gap-4">
+          <button
+            className={`p-10 bg-white shadow-md font-bold text-[24px] ${
+              symbol === "BTC" ? "text-blue-500" : "text-black"
+            }`}
+            onClick={() => setSymbol("BTC")}
+          >
+            BTC
+          </button>
+          <button
+            className={` p-10 bg-white shadow-md font-bold text-[24px] ${
+              symbol === "ETH" ? "text-blue-500" : "text-black"
+            }`}
+            onClick={() => setSymbol("ETH")}
+          >
+            ETH
+          </button>
+          <button
+            className={` p-10 bg-white shadow-md font-bold text-[24px] ${
+              symbol === "SOL" ? "text-blue-500" : "text-black"
+            }`}
+            onClick={() => setSymbol("SOL")}
+          >
+            SOL
+          </button>
+        </div>
+      </div>
+      <div className="flex justify-between mt-[200px]">
         <div className="fold-bold text-[36px]">{event?.title}</div>
       </div>
       <div>
