@@ -124,7 +124,13 @@ export default function Home() {
       setOrderbook(result);
       setPrice(Number(data.price).toFixed(0));
       setDvol(Number(data.dvol).toFixed(2));
-
+      let dateOne = moment(
+        moment(data.events?.endDate).format("YYYY-MM-DD 23:59:59")
+      );
+      let dateTwo = moment();
+      console.log(dateOne, dateTwo);
+      // Function call
+      let different = dateOne.diff(dateTwo, "hours");
       const abrove_below = await ab(
         Number(data.price),
         Number(
@@ -134,14 +140,14 @@ export default function Home() {
             .replace(",", "")
             .replace("$", "")
         ),
-        (moment(
-          moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
-        ).unix() -
-          moment().unix()) /
-          60 /
-          60 /
-          24 /
-          365,
+        different / 24 / 365,
+        // (moment(
+        //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
+        // ).unix() -
+        //   moment().unix()) /
+        //   1000 /
+        //   60 /
+        //   24,
         data.dvol
       );
       setAB(abrove_below);
