@@ -68,7 +68,7 @@ const getPrice = async (symbol) => {
     // console.log(obj.result.index_price);
     return obj.result.index_price;
   } catch (error) {
-    console.error(error.data);
+    console.error(error);
   }
 };
 
@@ -111,7 +111,7 @@ export const POST = async (req, { params }) => {
     const orderbook = await getOrderbook(coin);
     const price = await getPrice(coin);
     const dvol = await getDVOL(coin);
-    console.log(pages);
+    // console.log(pages);
 
     return new Response(JSON.stringify({ events, orderbook, price, dvol }), {
       status: 200,

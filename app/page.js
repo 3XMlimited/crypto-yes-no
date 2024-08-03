@@ -106,6 +106,7 @@ export default function Home() {
   const [dvol, setDvol] = useState("");
   const [aB, setAB] = useState([]);
   const [symbol, setSymbol] = useState("BTC");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -148,11 +149,12 @@ export default function Home() {
       // return result;
     };
 
-    fetchData();
+    // fetchData();
+    setIsLoading(true);
     const intervalId = setInterval(() => {
       fetchData();
     }, 5000);
-
+    setIsLoading(false);
     return () => {
       clearInterval(intervalId); //This is important
     };
@@ -199,56 +201,62 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className="flex justify-between mt-[200px]">
-        <div className="fold-bold text-[36px]">{event?.title}</div>
-      </div>
-      <div>
-        <div className="flex justify-between">
-          <div className=" bg-white shadow-md rounded-md p-10">
-            <div>Price </div>
-            <div
-              className={`${
-                color === "green"
-                  ? "text-green-500"
-                  : color === "red"
-                  ? "text-red-500"
-                  : "text-black"
-              } font-bold`}
-            >
-              {price}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div className="flex justify-between mt-[200px]">
+            <div className="fold-bold text-[36px]">{event?.title}</div>
+          </div>
+          <div>
+            <div className="flex justify-between">
+              <div className=" bg-white shadow-md rounded-md p-10">
+                <div>Price </div>
+                <div
+                  className={`${
+                    color === "green"
+                      ? "text-green-500"
+                      : color === "red"
+                      ? "text-red-500"
+                      : "text-black"
+                  } font-bold`}
+                >
+                  {price}
+                </div>
+              </div>
+
+              <div className=" bg-white shadow-md rounded-md p-10">
+                <div>Target</div>
+                <div className="font-bold">
+                  {event?.title?.split(" ").find((r) => r.includes("$"))}
+                </div>
+              </div>
+              <div className=" bg-white shadow-md rounded-md p-10">
+                <div>DVOL</div>
+                <div className="font-bold">{dvol}</div>
+              </div>
+
+              <div className=" bg-white shadow-md rounded-md p-10">
+                <div>RESULT</div>
+
+                <div className="font-bold">{aB.toString()}</div>
+              </div>
+              <div className=" bg-white shadow-md rounded-md p-10 flex justify-center items-center font-bold">
+                {moment(moment(event?.endDate).format("YYYY-MM-DD 23:59:59"))
+                  .endOf("H")
+                  .fromNow()}
+              </div>
             </div>
           </div>
-
-          <div className=" bg-white shadow-md rounded-md p-10">
-            <div>Target</div>
-            <div className="font-bold">
-              {event?.title?.split(" ").find((r) => r.includes("$"))}
-            </div>
-          </div>
-          <div className=" bg-white shadow-md rounded-md p-10">
-            <div>DVOL</div>
-            <div className="font-bold">{dvol}</div>
-          </div>
-
-          <div className=" bg-white shadow-md rounded-md p-10">
-            <div>RESULT</div>
-
-            <div className="font-bold">{aB.toString()}</div>
-          </div>
-          <div className=" bg-white shadow-md rounded-md p-10 flex justify-center items-center font-bold">
-            {moment(moment(event?.endDate).format("YYYY-MM-DD 23:59:59"))
-              .endOf("H")
-              .fromNow()}
-          </div>
-        </div>
-      </div>
-      <TableDemo data={orderbook?.asks} title={"ASK"} color="red" ab={aB} />
-      <TableDemo
-        data={orderbook?.bids?.slice(0, 5)}
-        title={"BID"}
-        color="green"
-        ab={aB}
-      />
+          <TableDemo data={orderbook?.asks} title={"ASK"} color="red" ab={aB} />
+          <TableDemo
+            data={orderbook?.bids?.slice(0, 5)}
+            title={"BID"}
+            color="green"
+            ab={aB}
+          />
+        </>
+      )}
     </div>
   );
 }
