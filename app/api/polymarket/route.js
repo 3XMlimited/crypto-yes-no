@@ -30,7 +30,7 @@ const coinLists = {
 const getDVOL = async (coinId) => {
   const start = Date.now();
   const req = await axios.get(
-    `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId.toLowerCase()}&start_timestamp=${(
+    `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId}&start_timestamp=${(
       start - 36000
     ).toString()}&end_timestamp=${start.toString()}&resolution=1`
   );
