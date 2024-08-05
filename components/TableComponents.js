@@ -97,9 +97,10 @@ const TableComponent = ({ symbol }) => {
   const [price, setPrice] = useState("");
   const [old_price, setOldPrice] = useState("");
   const [color, setColor] = useState("black");
+
   const [dvol, setDvol] = useState(null);
   const [aB, setAB] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
