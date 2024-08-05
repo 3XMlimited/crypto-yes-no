@@ -46,6 +46,7 @@ const getDVOL = async (coinId) => {
   }
 };
 
+// getInstrument();
 const getPrice = async (symbol) => {
   let coinId;
   if (symbol === "BTC") {
@@ -62,6 +63,7 @@ const getPrice = async (symbol) => {
   const req = await axios.get(
     `https://www.deribit.com/api/v2/public/get_index_price?index_name=${coinId}`
   );
+
   try {
     const obj = req?.data;
     // console.log(obj);
@@ -121,3 +123,17 @@ export const POST = async (req, { params }) => {
     return new Response("Failed to get polymarket", { status: 500 });
   }
 };
+
+// const getInstrument = async (coinId) => {
+//   const start = Date.now();
+//   const req = await axios.get(
+//     `https://www.deribit.com/api/v2/public/get_instruments?currency=SOL&kind=option`
+//   );
+//   try {
+//     const obj = req?.data;
+//     console.log(obj);
+//   } catch (err) {
+//     console.log(err.data);
+//   }
+// };
+// getInstrument();
