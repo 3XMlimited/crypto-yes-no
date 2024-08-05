@@ -279,7 +279,7 @@ const TableComponent = ({ symbol }) => {
           </div>
           <TableDemo data={orderbook?.asks} title={"ASK"} color="red" ab={aB} />
           <TableDemo
-            data={orderbook?.bids.slice(0, 5)}
+            data={orderbook?.bids?.slice(0, 5)}
             title={"BID"}
             color="green"
             ab={aB}
