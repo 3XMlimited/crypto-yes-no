@@ -210,11 +210,11 @@ const TableComponent = ({ symbol }) => {
         <div className="flex flex-col space-y-3 h-screen">
           <Skeleton className="h-4 w-96" />
           <div className="flex justify-between mt-[20px] gap-4 ">
-            <Skeleton className="p-5 w-24 h-16 rounded-xl " />
-            <Skeleton className="p-5 w-24 h-16 rounded-xl " />
-            <Skeleton className="p-5 w-24 h-16 rounded-xl " />
-            <Skeleton className="p-5 w-24 h-16 rounded-xl " />
-            <Skeleton className="p-5 w-24 h-16 rounded-xl " />
+            <Skeleton className="p-5 md:w-12 xl:w-24 w-24 h-16 rounded-xl " />
+            <Skeleton className="p-5 md:w-12 xl:w-24 w-24 h-16 rounded-xl " />
+            <Skeleton className="p-5 md:w-12 xl:w-24 w-24 h-16 rounded-xl " />
+            <Skeleton className="p-5 md:w-12 xl:w-24 w-24 h-16 rounded-xl " />
+            <Skeleton className="p-5 md:w-12 xl:w-24 w-24 h-16 rounded-xl " />
           </div>
 
           <div className="space-y-2">
@@ -229,7 +229,7 @@ const TableComponent = ({ symbol }) => {
           </div>
           <div>
             <div className="flex justify-between">
-              <div className=" bg-white shadow-md rounded-md p-5 w-24">
+              <div className=" bg-white shadow-md rounded-md p-5 md:w-18  w-24 xl:w-24">
                 <div>Price </div>
                 <div
                   className={`${
@@ -244,18 +244,18 @@ const TableComponent = ({ symbol }) => {
                 </div>
               </div>
 
-              <div className=" bg-white shadow-md rounded-md p-5 w-24">
+              <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
                 <div>Target</div>
                 <div className="font-bold">
                   {event?.title?.split(" ").find((r) => r.includes("$"))}
                 </div>
               </div>
-              <div className=" bg-white shadow-md rounded-md p-5 w-24">
+              <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
                 <div>
                   <div>DVOL</div>
                   <input
                     placeholder="input"
-                    className="font-bold w-12"
+                    className="font-bold w-12 "
                     value={dvol}
                     onChange={(e) => setDvol(e.target.value)}
                   />
@@ -263,12 +263,12 @@ const TableComponent = ({ symbol }) => {
                 {/* <div className="font-bold">{dvol}</div> */}
               </div>
 
-              <div className=" bg-white shadow-md rounded-md p-5 w-24">
+              <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
                 <div>RESULT</div>
 
                 <div className="font-bold">{aB[0]}</div>
               </div>
-              <div className=" bg-white shadow-md rounded-md p-5   w-24">
+              <div className=" bg-white shadow-md rounded-md p-5    md:w-18  w-24 xl:w-24">
                 <div>Expiry</div>
                 {moment(
                   moment(event?.endDate).format("YYYY-MM-DD 23:59:59")
