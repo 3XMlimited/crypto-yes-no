@@ -97,7 +97,7 @@ const TableComponent = ({ symbol }) => {
   const [price, setPrice] = useState("");
   const [old_price, setOldPrice] = useState("");
   const [color, setColor] = useState("black");
-  const [dvol, setDvol] = useState("");
+  const [dvol, setDvol] = useState(null);
   const [aB, setAB] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -117,34 +117,37 @@ const TableComponent = ({ symbol }) => {
       setEvent(data.events);
       setOrderbook(result);
       setPrice(Number(data.price).toFixed(0));
-      setDvol(Number(data.dvol).toFixed(2));
-      let dateOne = moment(
-        moment(data.events?.endDate).format("YYYY-MM-DD 23:59:59")
-      );
-      let dateTwo = moment();
+      if (data.dvol) {
+        setDvol(Number(data.dvol).toFixed(2));
+      }
+
+      //   let dateOne = moment(
+      //     moment(data.events?.endDate).format("YYYY-MM-DD 23:59:59")
+      //   );
+      //   let dateTwo = moment();
       //   console.log(dateOne, dateTwo);
       // Function call
-      let different = dateOne.diff(dateTwo, "hours");
-      const abrove_below = await ab(
-        Number(data.price),
-        Number(
-          data.events?.title
-            ?.split(" ")
-            .find((r) => r.includes("$"))
-            .replace(",", "")
-            .replace("$", "")
-        ),
-        different / 24 / 365,
-        // (moment(
-        //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
-        // ).unix() -
-        //   moment().unix()) /
-        //   1000 /
-        //   60 /
-        //   24,
-        data.dvol
-      );
-      setAB(abrove_below);
+      //   let different = dateOne.diff(dateTwo, "hours");
+      //   const abrove_below = await ab(
+      //     Number(data.price),
+      //     Number(
+      //       data.events?.title
+      //         ?.split(" ")
+      //         .find((r) => r.includes("$"))
+      //         .replace(",", "")
+      //         .replace("$", "")
+      //     ),
+      //     different / 24 / 365,
+      // (moment(
+      //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
+      // ).unix() -
+      //   moment().unix()) /
+      //   1000 /
+      //   60 /
+      //   24,
+      // data.dvol
+      //   );
+      //   setAB(abrove_below);
       console.log(data);
       // return result;
     };
@@ -160,6 +163,34 @@ const TableComponent = ({ symbol }) => {
       clearInterval(intervalId); //This is important
     };
   }, [symbol]);
+
+  useEffect(() => {
+    let dateOne = moment(moment(event?.endDate).format("YYYY-MM-DD 23:59:59"));
+    let dateTwo = moment();
+    //   console.log(dateOne, dateTwo);
+    // Function call
+    let different = dateOne.diff(dateTwo, "hours");
+    const abrove_below = ab(
+      Number(price),
+      Number(
+        event?.title
+          ?.split(" ")
+          .find((r) => r.includes("$"))
+          .replace(",", "")
+          .replace("$", "")
+      ),
+      different / 24 / 365,
+      // (moment(
+      //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
+      // ).unix() -
+      //   moment().unix()) /
+      //   1000 /
+      //   60 /
+      //   24,
+      dvol
+    );
+    setAB(abrove_below);
+  }, [dvol]);
 
   useEffect(() => {
     if (price > old_price) {
@@ -219,8 +250,16 @@ const TableComponent = ({ symbol }) => {
                 </div>
               </div>
               <div className=" bg-white shadow-md rounded-md p-5 w-24">
-                <div>DVOL</div>
-                <div className="font-bold">{dvol}</div>
+                <div>
+                  <div>DVOL</div>
+                  <input
+                    placeholder="input"
+                    className="font-bold w-12"
+                    value={dvol}
+                    onChange={(e) => setDvol(e.target.value)}
+                  />
+                </div>
+                {/* <div className="font-bold">{dvol}</div> */}
               </div>
 
               <div className=" bg-white shadow-md rounded-md p-5 w-24">
