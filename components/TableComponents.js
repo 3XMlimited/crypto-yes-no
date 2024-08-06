@@ -345,61 +345,70 @@ const TableComponent = ({ index }) => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="flex justify-between">
-              <div className=" bg-white shadow-md rounded-md p-5 md:w-18  w-24 xl:w-24">
-                <div>Price </div>
-                <div
-                  className={`${
-                    color === "green"
-                      ? "text-green-500"
-                      : color === "red"
-                      ? "text-red-500"
-                      : "text-black"
-                  } font-bold`}
-                >
-                  {price}
+          {post?.symbol && (
+            <div>
+              <div>
+                <div className="flex justify-between">
+                  <div className=" bg-white shadow-md rounded-md p-5 md:w-18  w-24 xl:w-24">
+                    <div>Price </div>
+                    <div
+                      className={`${
+                        color === "green"
+                          ? "text-green-500"
+                          : color === "red"
+                          ? "text-red-500"
+                          : "text-black"
+                      } font-bold`}
+                    >
+                      {price}
+                    </div>
+                  </div>
+
+                  <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
+                    <div>Target</div>
+                    <div className="font-bold">{post?.target}</div>
+                  </div>
+                  <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
+                    <div>
+                      <div>DVOL</div>
+                      <input
+                        placeholder="input"
+                        className="font-bold w-12 "
+                        value={dvol}
+                        onChange={(e) => setDvol(e.target.value)}
+                      />
+                    </div>
+                    {/* <div className="font-bold">{dvol}</div> */}
+                  </div>
+
+                  <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
+                    <div>RESULT</div>
+
+                    <div className="font-bold">{aB[0]}</div>
+                  </div>
+                  <div className=" bg-white shadow-md rounded-md p-5    md:w-18  w-24 xl:w-24">
+                    <div>Expiry</div>
+                    {moment(
+                      moment(event?.endDate).format("YYYY-MM-DD 23:59:59")
+                    ).diff(moment(), "hours")}{" "}
+                    H
+                  </div>
                 </div>
               </div>
-
-              <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
-                <div>Target</div>
-                <div className="font-bold">{post?.target}</div>
-              </div>
-              <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
-                <div>
-                  <div>DVOL</div>
-                  <input
-                    placeholder="input"
-                    className="font-bold w-12 "
-                    value={dvol}
-                    onChange={(e) => setDvol(e.target.value)}
-                  />
-                </div>
-                {/* <div className="font-bold">{dvol}</div> */}
-              </div>
-
-              <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
-                <div>RESULT</div>
-
-                <div className="font-bold">{aB[0]}</div>
-              </div>
-              <div className=" bg-white shadow-md rounded-md p-5    md:w-18  w-24 xl:w-24">
-                <div>Expiry</div>
-                {moment(
-                  moment(event?.endDate).format("YYYY-MM-DD 23:59:59")
-                ).diff(moment(), "hours")}{" "}
-                H
-              </div>
+              <TableDemo
+                data={orderbook?.asks}
+                title={"ASK"}
+                color="red"
+                ab={aB}
+              />
+              <TableDemo
+                data={orderbook?.bids?.slice(0, 5)}
+                title={"BID"}
+                color="green"
+                ab={aB}
+              />
             </div>
-          </div>
-          <TableDemo data={orderbook?.asks} title={"ASK"} color="red" ab={aB} />
-          <TableDemo
-            data={orderbook?.bids?.slice(0, 5)}
-            title={"BID"}
-            color="green"
-            ab={aB}
-          />
+          )}
         </>
       )}
     </div>
