@@ -27,8 +27,62 @@ const coinLists = {
   },
 };
 
-const getOrderbook = async (coin) => {
-  const id = coinLists[coin].yes_no_ids[1];
+const getDVOL = async (coinId) => {
+  const start = Date.now();
+  const req = await axios.get(
+    `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId}&start_timestamp=${(
+      start - 36000
+    ).toString()}&end_timestamp=${start.toString()}&resolution=1`
+  );
+  try {
+    const obj = req?.data;
+    // console.log(obj);
+    let dvol = obj?.result?.data[0];
+    // console.log(dvol);
+    dvol = dvol[dvol.length - 1];
+    return dvol;
+  } catch (err) {
+    console.log(err.data);
+  }
+};
+
+// getInstrument();
+const getPrice = async (symbol) => {
+  let coinId;
+  if (symbol === "BTC") {
+    coinId = "btc_usd";
+  } else {
+    if (symbol === "ETH") {
+      coinId = "eth_usd";
+    } else {
+      if (symbol === "SOL") {
+        coinId = "sol_usd";
+      }
+    }
+  }
+  const req = await axios.get(
+    `https://www.deribit.com/api/v2/public/get_index_price?index_name=${coinId}`
+  );
+
+  try {
+    const obj = req?.data;
+    // console.log(obj);
+    // console.log(obj.result.index_price);
+    return obj.result.index_price;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getOrderbook = async (post) => {
+  let id = "";
+
+  if (post.side) {
+    id = post.ids[0];
+  } else {
+    id = post.ids[1];
+  }
+
   const uri =
     // "https://clob.polymarket.com/book?token_id=10382206167602821537615393390727190508838830270797400733981332891522737823882";
     "https://clob.polymarket.com/book?token_id=";
@@ -44,7 +98,7 @@ const getOrderbook = async (coin) => {
   return result;
 };
 
-const getEvents = async (coin) => {
+const getEvents = async (post) => {
   const uri = "https://gamma-api.polymarket.com/events/";
   const id = coinLists[coin].id;
   const response = await fetch(uri + id, {
@@ -57,18 +111,32 @@ const getEvents = async (coin) => {
   return result;
 };
 
+const getPages = async () => {
+  const uri =
+    "https://gamma-api.polymarket.com/markets?active=true&closed=false";
+  const response = await fetch(uri, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const result = await response.json();
+  //   console.log(result);
+  return result;
+};
+
 export const POST = async (req, { params }) => {
   try {
     // console.log("1", await req.json());
-    const { coin } = await req.json();
+    const { post } = await req.json();
+    // console.log(post);
     // console.log(coin);
-    const events = await getEvents(coin);
-    const orderbook = await getOrderbook(coin);
-    const price = await getPrice(coin);
-    const dvol = await getDVOL(coin);
-    // console.log(pages);
+    // const events = await getEvents(post);
+    const orderbook = await getOrderbook(post);
+    const price = await getPrice(post.symbol);
+    const dvol = await getDVOL(post.symbol);
 
-    return new Response(JSON.stringify({ events, orderbook, price, dvol }), {
+    //
+    return new Response(JSON.stringify({ orderbook, price, dvol }), {
       status: 200,
     });
   } catch (error) {
@@ -79,16 +147,8 @@ export const POST = async (req, { params }) => {
 
 export const GET = async (req, { params }) => {
   try {
-    // console.log("1", await req.json());
-    const { coin } = await req.json();
-    // console.log(coin);
-    const events = await getEvents(coin);
-    const orderbook = await getOrderbook(coin);
-    const price = await getPrice(coin);
-    const dvol = await getDVOL(coin);
-    // console.log(pages);
-
-    return new Response(JSON.stringify({ events, orderbook, price, dvol }), {
+    const pages = await getPages();
+    return new Response(JSON.stringify({ pages }), {
       status: 200,
     });
   } catch (error) {
@@ -96,3 +156,17 @@ export const GET = async (req, { params }) => {
     return new Response("Failed to get polymarket", { status: 500 });
   }
 };
+
+// const getInstrument = async (coinId) => {
+//   const start = Date.now();
+//   const req = await axios.get(
+//     `https://www.deribit.com/api/v2/public/get_instruments?currency=SOL&kind=option`
+//   );
+//   try {
+//     const obj = req?.data;
+//     console.log(obj);
+//   } catch (err) {
+//     console.log(err.data);
+//   }
+// };
+// getInstrument();

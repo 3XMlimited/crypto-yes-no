@@ -211,6 +211,7 @@ const TableComponent = ({ index }) => {
     // return result;
   };
 
+  // console.log(post);
   useEffect(() => {
     if (post.symbol) {
       const fetchData = async () => {
