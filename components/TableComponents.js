@@ -14,6 +14,73 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+
+function CardWithForm({ price, dvol }) {
+  const [target, setTarget] = useState(null);
+  const [expiry, setExpiry] = useState(null);
+  const [result, setResult] = useState([]);
+
+  async function fetchRun() {
+    const res = ab(price, target, expiry / 24 / 365, dvol);
+    setResult(res);
+  }
+  return (
+    <Card className="w-full mt-2">
+      <CardHeader>
+        <CardTitle>abrove_below calculator</CardTitle>
+        {/* <CardDescription>Deploy your new project in one-click.</CardDescription> */}
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Target</Label>
+              <Input
+                id="target"
+                type={"number"}
+                placeholder="Target Price"
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Expiry (Hours)</Label>
+              <Input
+                id="expiry"
+                type={"number"}
+                placeholder="Expiry hours"
+                value={expiry}
+                onChange={(e) => setExpiry(e.target.value)}
+              />
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        {/* <Button variant="outline">Cancel</Button> */}
+        <Button onClick={fetchRun}>Run</Button>
+
+        <div className="flex justify-between">
+          {result.map((r) => (
+            <div className="bg-white shadow-md px-5 py-2 mx-2 rounded-md ">
+              {r}
+            </div>
+          ))}
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
 function ab(price, strike, time, value) {
   console.log(price, strike, time, value);
   let p = price;
@@ -411,6 +478,7 @@ const TableComponent = ({ index }) => {
                 color="green"
                 ab={aB}
               />
+              <CardWithForm price={price} dvol={dvol} />
             </div>
           )}
         </>
