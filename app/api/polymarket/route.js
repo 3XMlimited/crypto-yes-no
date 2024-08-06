@@ -27,53 +27,6 @@ const coinLists = {
   },
 };
 
-const getDVOL = async (coinId) => {
-  const start = Date.now();
-  const req = await axios.get(
-    `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId}&start_timestamp=${(
-      start - 36000
-    ).toString()}&end_timestamp=${start.toString()}&resolution=1`
-  );
-  try {
-    const obj = req?.data;
-    // console.log(obj);
-    let dvol = obj?.result?.data[0];
-    // console.log(dvol);
-    dvol = dvol[dvol.length - 1];
-    return dvol;
-  } catch (err) {
-    console.log(err.data);
-  }
-};
-
-// getInstrument();
-const getPrice = async (symbol) => {
-  let coinId;
-  if (symbol === "BTC") {
-    coinId = "btc_usd";
-  } else {
-    if (symbol === "ETH") {
-      coinId = "eth_usd";
-    } else {
-      if (symbol === "SOL") {
-        coinId = "sol_usd";
-      }
-    }
-  }
-  const req = await axios.get(
-    `https://www.deribit.com/api/v2/public/get_index_price?index_name=${coinId}`
-  );
-
-  try {
-    const obj = req?.data;
-    // console.log(obj);
-    // console.log(obj.result.index_price);
-    return obj.result.index_price;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const getOrderbook = async (coin) => {
   const id = coinLists[coin].yes_no_ids[1];
   const uri =
@@ -124,16 +77,22 @@ export const POST = async (req, { params }) => {
   }
 };
 
-// const getInstrument = async (coinId) => {
-//   const start = Date.now();
-//   const req = await axios.get(
-//     `https://www.deribit.com/api/v2/public/get_instruments?currency=SOL&kind=option`
-//   );
-//   try {
-//     const obj = req?.data;
-//     console.log(obj);
-//   } catch (err) {
-//     console.log(err.data);
-//   }
-// };
-// getInstrument();
+export const GET = async (req, { params }) => {
+  try {
+    // console.log("1", await req.json());
+    const { coin } = await req.json();
+    // console.log(coin);
+    const events = await getEvents(coin);
+    const orderbook = await getOrderbook(coin);
+    const price = await getPrice(coin);
+    const dvol = await getDVOL(coin);
+    // console.log(pages);
+
+    return new Response(JSON.stringify({ events, orderbook, price, dvol }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.log(error);
+    return new Response("Failed to get polymarket", { status: 500 });
+  }
+};

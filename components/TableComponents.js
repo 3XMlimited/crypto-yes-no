@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function ab(price, strike, time, value) {
@@ -91,8 +92,31 @@ function TableDemo({ data, title, color, ab }) {
   );
 }
 
-const TableComponent = ({ symbol }) => {
+const TableComponent = ({ index }) => {
+  const [pages, setPages] = useState({});
+  //   const [question, setQuestion] = useState("");
+
+  let value = {
+    question: "",
+    symbol: "",
+    target: "",
+    side: false,
+    ids: [],
+    endDate: new Date(),
+  };
+  if (typeof window !== "undefined") {
+    value = JSON.parse(localStorage.getItem(`table${index}`)) || {
+      question: "",
+      symbol: "",
+      target: "",
+      side: false,
+      ids: [],
+      endDate: new Date(),
+    };
+  }
+  // JSON.parse(
   const [orderbook, setOrderbook] = useState({});
+
   const [event, setEvent] = useState({});
   const [price, setPrice] = useState("");
   const [old_price, setOldPrice] = useState("");
@@ -102,95 +126,148 @@ const TableComponent = ({ symbol }) => {
   const [aB, setAB] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [post, setPost] = useState(value);
+
+  const filterSymbol = (question) => {
+    console.log(question.toLowerCase());
+    if (question.toLowerCase().includes("bitcoin")) {
+      return "BTC";
+    } else if (question.toLowerCase().includes("ethereum")) {
+      return "ETH";
+    } else if (question.toLowerCase().includes("solana")) {
+      return "SOL";
+    }
+  };
+
+  const fetchSave = async () => {
+    setIsLoading(true);
+    console.log(post.question, pages);
+    const match = pages.find((r) => r.question === post.question);
+
+    if (match) {
+      const result = {
+        question: match.question,
+        side: post.side,
+        symbol: await filterSymbol(match.question),
+        target:
+          match?.question
+            ?.split(" ")
+            ?.find((r) => r.includes("$"))
+            ?.replace(",", "")
+            ?.replace("$", "") || 0,
+        ids: JSON.parse(match.clobTokenIds),
+        endDate: match.endDate,
+      };
+      setPost(result);
+      window.localStorage.setItem(`table${index}`, JSON.stringify(result));
+      //   window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      await fetchData(result);
+    } else {
+      alert("Can't find the post ,please make sure title is correct");
+    }
+
+    setIsLoading(false);
+    //   console.log(data.pages.find((r) => r.question === question).clobTokenIds);
+  };
+
+  //   console.log(post);
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPages = async () => {
       const response = await fetch("/api/polymarket", {
-        method: "POST",
-        body: JSON.stringify({
-          coin: symbol,
-        }),
+        method: "GET",
       });
       const data = await response.json();
-      // console.log(data);
-      let result = data.orderbook;
-      result.bids = result.bids.reverse();
-      //   resulta.asks = result.asks.reverse();
-      setEvent(data.events);
-      setOrderbook(result);
-      setPrice(Number(data.price).toFixed(0));
-      if (data.dvol) {
-        setDvol(Number(data.dvol).toFixed(2));
-      }
-
-      //   let dateOne = moment(
-      //     moment(data.events?.endDate).format("YYYY-MM-DD 23:59:59")
-      //   );
-      //   let dateTwo = moment();
-      //   console.log(dateOne, dateTwo);
-      // Function call
-      //   let different = dateOne.diff(dateTwo, "hours");
-      //   const abrove_below = await ab(
-      //     Number(data.price),
-      //     Number(
-      //       data.events?.title
-      //         ?.split(" ")
-      //         .find((r) => r.includes("$"))
-      //         .replace(",", "")
-      //         .replace("$", "")
-      //     ),
-      //     different / 24 / 365,
-      // (moment(
-      //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
-      // ).unix() -
-      //   moment().unix()) /
-      //   1000 /
-      //   60 /
-      //   24,
-      // data.dvol
-      //   );
-      //   setAB(abrove_below);
       console.log(data);
-      // return result;
+      //  const questions = "Ethereum above $3,000 on August 9?";
+      setPages(data.pages);
     };
+    fetchPages();
+  }, [post]);
 
-    // fetchData();
-    setIsLoading(true);
-    const intervalId = setInterval(() => {
-      fetchData();
-      setIsLoading(false);
-    }, 5000);
+  const fetchData = async (obj) => {
+    const response = await fetch("/api/polymarket", {
+      method: "POST",
+      body: JSON.stringify({
+        // coin: symbol,
+        post: obj,
+      }),
+    });
+    const data = await response.json();
+    // console.log(data);
+    let result = data.orderbook;
+    result.bids = result.bids.reverse();
+    //   resulta.asks = result.asks.reverse();
+    // setEvent(data.events);
+    // setQuestion(data.events?.title);
+    setOrderbook(result);
+    setPrice(Number(data.price).toFixed(0));
+    if (data.dvol) {
+      setDvol(Number(data.dvol).toFixed(2));
+    }
 
-    return () => {
-      clearInterval(intervalId); //This is important
-    };
-  }, [symbol]);
+    console.log(data);
+    //
+    // return result;
+  };
 
   useEffect(() => {
-    let dateOne = moment(moment(event?.endDate).format("YYYY-MM-DD 23:59:59"));
-    let dateTwo = moment();
-    //   console.log(dateOne, dateTwo);
-    // Function call
-    let different = dateOne.diff(dateTwo, "hours");
-    const abrove_below = ab(
-      Number(price),
-      Number(
-        event?.title
-          ?.split(" ")
-          .find((r) => r.includes("$"))
-          .replace(",", "")
-          .replace("$", "")
-      ),
-      different / 24 / 365,
-      // (moment(
-      //   moment(data.event?.endDate).format("YYYY-MM-DD 23:59:59")
-      // ).unix() -
-      //   moment().unix()) /
-      //   1000 /
-      //   60 /
-      //   24,
-      dvol
-    );
-    setAB(abrove_below);
+    if (post.symbol) {
+      const fetchData = async () => {
+        const response = await fetch("/api/polymarket", {
+          method: "POST",
+          body: JSON.stringify({
+            // coin: symbol,
+            post,
+          }),
+        });
+        const data = await response.json();
+        // console.log(data);
+        let result = data.orderbook;
+        result.bids = result.bids.reverse();
+        //   resulta.asks = result.asks.reverse();
+        // setEvent(data.events);
+        // setQuestion(data.events?.title);
+        setOrderbook(result);
+        setPrice(Number(data.price).toFixed(0));
+        if (data.dvol) {
+          setDvol(Number(data.dvol).toFixed(2));
+        }
+
+        console.log(data);
+        //
+        // return result;
+      };
+
+      const intervalId = setInterval(() => {
+        fetchData();
+        setIsLoading(false);
+      }, 5000);
+
+      return () => {
+        clearInterval(intervalId); //This is important
+      };
+    } else {
+      setIsLoading(false);
+    }
+  }, [post]);
+
+  useEffect(() => {
+    if (post && dvol) {
+      let dateOne = moment(moment(post?.endDate).format("YYYY-MM-DD 23:59:59"));
+      let dateTwo = moment();
+      //   console.log(dateOne, dateTwo);
+      // Function call
+      let different = dateOne.diff(dateTwo, "hours");
+      const abrove_below = ab(
+        Number(price),
+        Number(post?.target),
+        different / 24 / 365,
+
+        dvol
+      );
+      setAB(abrove_below);
+    }
   }, [dvol]);
 
   useEffect(() => {
@@ -204,6 +281,7 @@ const TableComponent = ({ symbol }) => {
     setOldPrice(price);
   }, [price]);
 
+  //   console.log(post);
   return (
     <div className="border-r-2 pr-2">
       {isLoading ? (
@@ -225,7 +303,46 @@ const TableComponent = ({ symbol }) => {
       ) : (
         <>
           <div className="mt-[20px] ">
-            <div className="fold-bold text-[24px] w-full">{event?.title}</div>
+            <div className="relative">
+              <Input
+                className="fold-bold text-[20px] w-full h-12 mb-1"
+                value={post.question}
+                onChange={(e) =>
+                  setPost((prev) => ({ ...prev, question: e.target.value }))
+                }
+              />
+              <div className="flex  absolute right-2 top-1">
+                <Button
+                  className={`${
+                    post.side && "bg-green-500"
+                  } rounded-r-none hover:bg-green-400 `}
+                  onClick={(e) =>
+                    setPost((prev) => ({
+                      ...prev,
+                      side: true,
+                    }))
+                  }
+                >
+                  YES
+                </Button>
+                <Button
+                  className={`${
+                    post.side === false && "bg-red-500"
+                  } rounded-l-none  mr-2 hover:bg-red-400`}
+                  onClick={(e) =>
+                    setPost((prev) => ({
+                      ...prev,
+                      side: false,
+                    }))
+                  }
+                >
+                  NO
+                </Button>
+                <Button className="bg-blue-500" onClick={fetchSave}>
+                  Save
+                </Button>
+              </div>
+            </div>
           </div>
           <div>
             <div className="flex justify-between">
@@ -246,9 +363,7 @@ const TableComponent = ({ symbol }) => {
 
               <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
                 <div>Target</div>
-                <div className="font-bold">
-                  {event?.title?.split(" ").find((r) => r.includes("$"))}
-                </div>
+                <div className="font-bold">{post?.target}</div>
               </div>
               <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
                 <div>
