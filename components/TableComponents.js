@@ -312,33 +312,37 @@ const TableComponent = ({ index }) => {
                   setPost((prev) => ({ ...prev, question: e.target.value }))
                 }
               />
-              <div className="flex  absolute right-2 top-1">
-                <Button
-                  className={`${
-                    post.side && "bg-green-500"
-                  } rounded-r-none hover:bg-green-400 `}
-                  onClick={(e) =>
-                    setPost((prev) => ({
-                      ...prev,
-                      side: true,
-                    }))
-                  }
-                >
-                  YES
-                </Button>
-                <Button
-                  className={`${
-                    post.side === false && "bg-red-500"
-                  } rounded-l-none  mr-2 hover:bg-red-400`}
-                  onClick={(e) =>
-                    setPost((prev) => ({
-                      ...prev,
-                      side: false,
-                    }))
-                  }
-                >
-                  NO
-                </Button>
+              <div className="flex  justify-between  mx-2">
+                <div>
+                  <Button
+                    variant="outline"
+                    className={`${
+                      post.side && "bg-green-500"
+                    } rounded-r-none hover:bg-green-400 `}
+                    onClick={(e) =>
+                      setPost((prev) => ({
+                        ...prev,
+                        side: true,
+                      }))
+                    }
+                  >
+                    YES
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className={`${
+                      post.side === false && "bg-red-500"
+                    } rounded-l-none  mr-2 hover:bg-red-400`}
+                    onClick={(e) =>
+                      setPost((prev) => ({
+                        ...prev,
+                        side: false,
+                      }))
+                    }
+                  >
+                    NO
+                  </Button>
+                </div>
                 <Button className="bg-blue-500" onClick={fetchSave}>
                   Save
                 </Button>
