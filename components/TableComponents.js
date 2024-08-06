@@ -393,7 +393,7 @@ const TableComponent = ({ index }) => {
                   <div className=" bg-white shadow-md rounded-md p-5    md:w-18  w-24 xl:w-24">
                     <div>Expiry</div>
                     {moment(
-                      moment(event?.endDate).format("YYYY-MM-DD 23:59:59")
+                      moment(post?.endDate).format("YYYY-MM-DD 23:59:59")
                     ).diff(moment(), "hours")}{" "}
                     H
                   </div>
