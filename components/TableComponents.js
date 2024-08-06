@@ -178,12 +178,12 @@ const TableComponent = ({ index }) => {
         method: "GET",
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       //  const questions = "Ethereum above $3,000 on August 9?";
       setPages(data.pages);
     };
     fetchPages();
-  }, [post]);
+  }, []);
 
   const fetchData = async (obj) => {
     const response = await fetch("/api/polymarket", {
@@ -235,7 +235,7 @@ const TableComponent = ({ index }) => {
           setDvol(Number(data.dvol).toFixed(2));
         }
 
-        console.log(data);
+        // console.log(data);
         //
         // return result;
       };
