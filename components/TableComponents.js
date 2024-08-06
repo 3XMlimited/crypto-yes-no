@@ -304,9 +304,9 @@ const TableComponent = ({ index }) => {
       ) : (
         <>
           <div className="mt-[20px] ">
-            <div className="relative">
+            <div className="relative ">
               <Input
-                className="fold-bold text-[20px] w-full h-12 mb-1"
+                className="fold-bold text-[20px] w-full min-w-[400px]  h-12 mb-1"
                 value={post.question}
                 onChange={(e) =>
                   setPost((prev) => ({ ...prev, question: e.target.value }))
