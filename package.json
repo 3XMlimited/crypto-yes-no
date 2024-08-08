@@ -19,6 +19,7 @@
     "lucide-react": "^0.395.0",
     "moment": "^2.30.1",
     "mongodb": "^6.7.0",
+    "newton-raphson-method": "^1.0.2",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",

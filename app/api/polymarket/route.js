@@ -30,7 +30,9 @@ const coinLists = {
 const getDVOL = async (coinId) => {
   if (coinId === "SOL") {
     let bybit_dvol = await getBybitDvol(coinId);
+
     if (bybit_dvol) {
+      // console.log("Dvol: " + bybit_dvol);
       return bybit_dvol * 100;
     } else {
       return null;
@@ -54,6 +56,7 @@ const getDVOL = async (coinId) => {
     }
   }
 };
+
 const getBybitDvol = async (symbol) => {
   const start = Date.now();
   const req = await axios.get(
@@ -72,6 +75,41 @@ const getBybitDvol = async (symbol) => {
     console.log(err.data);
   }
 };
+
+// const newton_raphson = (c, S, K, r, t, sigma_0, tol = 1e-6) => {
+//   let sigma = sigma_0;
+//   while (true) {
+//     f = black_scholes(c, S, K, r, t, sigma) - c;
+//     f_prime = black_scholes_derivative(c, S, K, r, t, sigma);
+//     sigma_new = sigma - f / f_prime;
+//     if (Math.abs(sigma_new - sigma) < tol) {
+//       return sigma_new;
+//     }
+//     sigma = sigma_new;
+//   }
+// };
+
+// const test = async () => {
+//   // # Define the Bitcoin option price and strike price
+//   let c = 56930; //# Bitcoin call option price
+//   let K = 56930; //# Bitcoin option strike price
+
+//   // let # Define the Bitcoin price and time to maturity
+//   let S = 56930; // Bitcoin price
+//   let t = 30 / 365; // time to maturity (in years)
+//   // let
+//   // let # Define the risk-free interest rate
+//   let r = 0.01; // risk-free interest rate
+//   // let
+//   // let # Choose an initial value for sigma
+//   let sigma_0 = 0.5;
+//   // let
+//   // let # Estimate the implied volatility
+//   let sigma_implied = newton_raphson(c, S, K, r, t, sigma_0);
+//   print("Implied volatility:", sigma_implied);
+// };
+
+// test();
 
 // getInstrument();
 const getPrice = async (symbol) => {
