@@ -1,9 +1,10 @@
 "use client";
 
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 
 import TableComponent from "@/components/TableComponents";
+// import OrderComponent from "@/components/OrderComponents";
 
 export default function Home() {
   // const [pages, setPages] = useState({});
@@ -17,8 +18,7 @@ export default function Home() {
         <TableComponent index={"1"} />
         <TableComponent index={"2"} />
         <TableComponent index={"3"} />
-        {/* <TableComponent symbol={"ETH"} />
-        <TableComponent symbol={"SOL"} /> */}
+        {/* <OrderComponent /> */}
       </div>
     </div>
   );

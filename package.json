@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@polymarket/clob-client": "^4.8.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "axios": "^1.7.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "ethers": "^6.13.2",
     "lucide-react": "^0.395.0",
     "moment": "^2.30.1",
     "mongodb": "^6.7.0",

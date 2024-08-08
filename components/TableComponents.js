@@ -111,7 +111,7 @@ function ab(price, strike, time, value) {
   return [pabove, pbelow];
 }
 
-function TableDemo({ data, title, color, ab }) {
+function TableDemo({ data, title, color, ab, post }) {
   return (
     <Table className="h-[400px]  border-b-2">
       <TableHeader className="">
@@ -148,7 +148,10 @@ function TableDemo({ data, title, color, ab }) {
             </TableCell>
             <TableCell className="text-left w-[150px] ">
               <Button className="font-bold cursor-text">
-                {(ab[0] * (100 / (Number(d.price) * 100))).toFixed(1)}
+                {(post.side
+                  ? ab[1]
+                  : ab[0] * (100 / (Number(d.price) * 100))
+                ).toFixed(1)}
               </Button>
             </TableCell>
           </TableRow>
@@ -455,7 +458,7 @@ const TableComponent = ({ index }) => {
                   <div className=" bg-white shadow-md rounded-md p-5  md:w-18 md:gap-1 w-24 xl:w-24">
                     <div>RESULT</div>
 
-                    <div className="font-bold">{aB[0]}</div>
+                    <div className="font-bold">{post.side ? aB[1] : aB[0]}</div>
                   </div>
                   <div className=" bg-white shadow-md rounded-md p-5    md:w-18  w-24 xl:w-24">
                     <div>Expiry</div>
@@ -471,12 +474,14 @@ const TableComponent = ({ index }) => {
                 title={"ASK"}
                 color="red"
                 ab={aB}
+                post={post}
               />
               <TableDemo
                 data={orderbook?.bids?.slice(0, 5)}
                 title={"BID"}
                 color="green"
                 ab={aB}
+                post={post}
               />
               <CardWithForm price={price} dvol={dvol} />
             </div>
