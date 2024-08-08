@@ -304,17 +304,14 @@ const TableComponent = ({ index }) => {
         if (data.dvol) {
           setDvol(Number(data.dvol)?.toFixed(2));
         }
-
         // console.log(data);
         //
         // return result;
       };
-
       const intervalId = setInterval(() => {
         fetchData();
         setIsLoading(false);
       }, 5000);
-
       return () => {
         clearInterval(intervalId); //This is important
       };
@@ -447,7 +444,7 @@ const TableComponent = ({ index }) => {
                       <div>DVOL</div>
                       <input
                         placeholder="input"
-                        className="font-bold w-12 "
+                        className="font-bold w-14 "
                         value={dvol}
                         onChange={(e) => setDvol(e.target.value)}
                       />

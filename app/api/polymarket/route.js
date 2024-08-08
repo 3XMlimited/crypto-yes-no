@@ -28,19 +28,46 @@ const coinLists = {
 };
 
 const getDVOL = async (coinId) => {
+  if (coinId === "SOL") {
+    let bybit_dvol = await getBybitDvol(coinId);
+    if (bybit_dvol) {
+      return bybit_dvol * 100;
+    } else {
+      return null;
+    }
+  } else {
+    const start = Date.now();
+    const req = await axios.get(
+      `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId}&start_timestamp=${(
+        start - 36000
+      ).toString()}&end_timestamp=${start.toString()}&resolution=1`
+    );
+    try {
+      const obj = req?.data;
+
+      let dvol = obj?.result?.data[0];
+      // console.log(dvol);
+      dvol = dvol[dvol.length - 1];
+      return dvol;
+    } catch (err) {
+      console.log(err.data);
+    }
+  }
+};
+const getBybitDvol = async (symbol) => {
   const start = Date.now();
   const req = await axios.get(
-    `https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=${coinId}&start_timestamp=${(
-      start - 36000
-    ).toString()}&end_timestamp=${start.toString()}&resolution=1`
+    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`
   );
   try {
     const obj = req?.data;
+    console.log(obj);
     // console.log(obj);
-    let dvol = obj?.result?.data[0];
-    // console.log(dvol);
-    dvol = dvol[dvol.length - 1];
-    return dvol;
+    // let dvol = obj?.result?.data[0];
+    // // console.log(dvol);
+    // dvol = dvol[dvol.length - 1];
+    // return dvol;
+    return obj.result[0].value;
   } catch (err) {
     console.log(err.data);
   }
