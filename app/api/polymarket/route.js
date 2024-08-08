@@ -28,25 +28,23 @@ const coinLists = {
   },
 };
 const getBybitDvol = async (symbol) => {
-  const req = await axios.get(
-    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const req = await axios.post(`http://18.167.96.20/api/igalfer/bybit`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    symbol,
+  });
   try {
     const obj = req?.data;
     console.log(obj);
 
-    return obj?.result[0].value;
+    return obj;
   } catch (err) {
     console.log(err);
     return null;
   }
 };
-getBybitDvol("SOL");
+// getBybitDvol("SOL");
 const getDVOL = async (coinId) => {
   try {
     if (coinId === "SOL") {
