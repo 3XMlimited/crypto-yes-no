@@ -26,7 +26,21 @@ const coinLists = {
     ],
   },
 };
+const getBybitDvol = async (symbol) => {
+  const req = await axios.get(
+    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`
+  );
+  try {
+    const obj = req?.data;
+    console.log(obj);
 
+    return obj?.result[0].value;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+getBybitDvol("SOL");
 const getDVOL = async (coinId) => {
   try {
     if (coinId === "SOL") {
@@ -55,21 +69,6 @@ const getDVOL = async (coinId) => {
     }
   } catch (error) {
     console.log(error);
-    return null;
-  }
-};
-
-const getBybitDvol = async (symbol) => {
-  const req = await axios.get(
-    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`
-  );
-  try {
-    const obj = req?.data;
-    console.log(obj);
-
-    return obj?.result[0].value;
-  } catch (err) {
-    console.log(err.data);
     return null;
   }
 };
