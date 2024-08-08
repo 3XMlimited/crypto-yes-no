@@ -148,9 +148,9 @@ function TableDemo({ data, title, color, ab, post }) {
             </TableCell>
             <TableCell className="text-left w-[150px] ">
               <Button className="font-bold cursor-text">
-                {(post.side
-                  ? ab[1]
-                  : ab[0] * (100 / (Number(d.price) * 100))
+                {(
+                  (post.side ? ab[1] : ab[0]) *
+                  (100 / (Number(d.price) * 100))
                 )?.toFixed(1)}
               </Button>
             </TableCell>
