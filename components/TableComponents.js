@@ -450,10 +450,7 @@ const TableComponent = ({ index }) => {
                           placeholder=" x ... "
                           className=" w-14 "
                           value={fee}
-                          onChange={(e) => {
-                            // setDvol((prev) => e.target.value * prev);
-                            setFee(e.target.value);
-                          }}
+                          onChange={(e) => setFee(e.target.value)}
                         />
                       )}
                     </div>
