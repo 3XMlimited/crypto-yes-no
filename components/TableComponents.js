@@ -303,7 +303,7 @@ const TableComponent = ({ index }) => {
         setOrderbook(result);
         setPrice(Number(data.price)?.toFixed(0));
         if (data.dvol) {
-          setDvol(Number(data.dvol)?.toFixed(2));
+          setDvol(Number(data.dvol * fee)?.toFixed(2));
         }
         // console.log(data);
         //
