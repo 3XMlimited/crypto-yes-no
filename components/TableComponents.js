@@ -134,7 +134,7 @@ function TableDemo({ data, title, color, ab, post }) {
                   color === "green" ? "text-green-500" : "text-red-500"
                 } `}
               >
-                {(Number(d.price) * 100).toFixed(1)}
+                {(Number(d.price) * 100)?.toFixed(1)}
               </p>
             </TableCell>
             <TableCell className="text-left w-[150px]">
@@ -143,7 +143,7 @@ function TableDemo({ data, title, color, ab, post }) {
 
             <TableCell className="text-left w-[150px]">
               <Button variant="outline" className="font-bold cursor-text">
-                {(100 / (Number(d.price) * 100)).toFixed(3)}
+                {(100 / (Number(d.price) * 100))?.toFixed(3)}
               </Button>
             </TableCell>
             <TableCell className="text-left w-[150px] ">
@@ -151,7 +151,7 @@ function TableDemo({ data, title, color, ab, post }) {
                 {(post.side
                   ? ab[1]
                   : ab[0] * (100 / (Number(d.price) * 100))
-                ).toFixed(1)}
+                )?.toFixed(1)}
               </Button>
             </TableCell>
           </TableRow>
@@ -271,9 +271,9 @@ const TableComponent = ({ index }) => {
     // setEvent(data.events);
     // setQuestion(data.events?.title);
     setOrderbook(result);
-    setPrice(Number(data.price).toFixed(0));
+    setPrice(Number(data.price)?.toFixed(0));
     if (data.dvol) {
-      setDvol(Number(data.dvol).toFixed(2));
+      setDvol(Number(data.dvol)?.toFixed(2));
     }
 
     console.log(data);
@@ -300,9 +300,9 @@ const TableComponent = ({ index }) => {
         // setEvent(data.events);
         // setQuestion(data.events?.title);
         setOrderbook(result);
-        setPrice(Number(data.price).toFixed(0));
+        setPrice(Number(data.price)?.toFixed(0));
         if (data.dvol) {
-          setDvol(Number(data.dvol).toFixed(2));
+          setDvol(Number(data.dvol)?.toFixed(2));
         }
 
         // console.log(data);
