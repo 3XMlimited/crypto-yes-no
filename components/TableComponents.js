@@ -303,7 +303,7 @@ const TableComponent = ({ index }) => {
         setOrderbook(result);
         setPrice(Number(data.price)?.toFixed(0));
         if (data.dvol) {
-          setDvol(Number(data.dvol * fee)?.toFixed(2));
+          setDvol(Number(data.dvol)?.toFixed(2));
         }
         // console.log(data);
         //
@@ -333,11 +333,11 @@ const TableComponent = ({ index }) => {
         Number(post?.target),
         different / 24 / 365,
 
-        dvol
+        dvol * fee
       );
       setAB(abrove_below);
     }
-  }, [dvol]);
+  }, [dvol, fee]);
 
   useEffect(() => {
     if (price > old_price) {
@@ -443,14 +443,20 @@ const TableComponent = ({ index }) => {
                   <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
                     <div>
                       <div>DVOL</div>
-                      <div className="font-bold w-14 "> {dvol}</div>
+                      <div className="font-bold w-14 ">
+                        {(dvol * fee).toFixed(2)}
+                      </div>
 
                       {post.symbol === "SOL" && (
                         <input
                           placeholder=" x ... "
+                          type="number"
                           className=" w-14 "
                           value={fee}
-                          onChange={(e) => setFee(e.target.value)}
+                          onChange={(e) => {
+                            // setDvol((prev) => e.target.value * prev);
+                            setFee(e.target.value);
+                          }}
                         />
                       )}
                     </div>
@@ -485,7 +491,7 @@ const TableComponent = ({ index }) => {
                 ab={aB}
                 post={post}
               />
-              <CardWithForm price={price} dvol={dvol} />
+              <CardWithForm price={price} dvol={dvol * fee} />
             </div>
           )}
         </>
