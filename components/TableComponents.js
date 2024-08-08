@@ -452,7 +452,7 @@ const TableComponent = ({ index }) => {
                           value={fee}
                           onChange={(e) => {
                             // setDvol((prev) => e.target.value * prev);
-                            setFee((prev) => e.target.value);
+                            setFee(e.target.value);
                           }}
                         />
                       )}
