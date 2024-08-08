@@ -193,7 +193,7 @@ const TableComponent = ({ index }) => {
   const [color, setColor] = useState("black");
 
   const [dvol, setDvol] = useState(null);
-  const [fee, setFee] = useState(null);
+  const [fee, setFee] = useState(1);
   const [aB, setAB] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -274,7 +274,7 @@ const TableComponent = ({ index }) => {
     setOrderbook(result);
     setPrice(Number(data.price)?.toFixed(0));
     if (data.dvol) {
-      setDvol(Number(data.dvol)?.toFixed(2));
+      setDvol(Number(data.dvol * fee)?.toFixed(2));
     }
 
     console.log(data);
@@ -451,7 +451,7 @@ const TableComponent = ({ index }) => {
                           className=" w-14 "
                           value={fee}
                           onChange={(e) => {
-                            setDvol((prev) => e.target.value * prev);
+                            // setDvol((prev) => e.target.value * prev);
                             setFee((prev) => e.target.value);
                           }}
                         />
