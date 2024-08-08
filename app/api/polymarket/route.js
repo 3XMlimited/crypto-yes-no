@@ -1,5 +1,5 @@
 import axios from "axios";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 
 const coinLists = {
   BTC: {
@@ -52,7 +52,7 @@ const getDVOL = async (coinId) => {
 
       if (bybit_dvol) {
         // console.log("Dvol: " + bybit_dvol);
-        return bybit_dvol * 100;
+        return bybit_dvol * 100 * 1.05;
       } else {
         return null;
       }
