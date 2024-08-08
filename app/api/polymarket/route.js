@@ -1,4 +1,5 @@
 import axios from "axios";
+import { headers } from "next/headers";
 
 const coinLists = {
   BTC: {
@@ -28,7 +29,12 @@ const coinLists = {
 };
 const getBybitDvol = async (symbol) => {
   const req = await axios.get(
-    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`
+    `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   );
   try {
     const obj = req?.data;
