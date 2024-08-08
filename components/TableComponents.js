@@ -193,6 +193,7 @@ const TableComponent = ({ index }) => {
   const [color, setColor] = useState("black");
 
   const [dvol, setDvol] = useState(null);
+  const [fee, setFee] = useState(null);
   const [aB, setAB] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -442,12 +443,19 @@ const TableComponent = ({ index }) => {
                   <div className=" bg-white shadow-md rounded-md p-5  md:w-18   w-24 xl:w-24">
                     <div>
                       <div>DVOL</div>
-                      <input
-                        placeholder="input"
-                        className="font-bold w-14 "
-                        value={dvol}
-                        onChange={(e) => setDvol(e.target.value)}
-                      />
+                      <div className="font-bold w-14 "> {dvol}</div>
+
+                      {post.symbol === "SOL" && (
+                        <input
+                          placeholder=" x ... "
+                          className=" w-14 "
+                          value={fee}
+                          onChange={(e) => {
+                            setDvol((prev) => e.target.value * prev);
+                            setFee((prev) => e.target.value);
+                          }}
+                        />
+                      )}
                     </div>
                     {/* <div className="font-bold">{dvol}</div> */}
                   </div>
