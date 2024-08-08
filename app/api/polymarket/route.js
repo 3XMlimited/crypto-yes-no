@@ -58,21 +58,17 @@ const getDVOL = async (coinId) => {
 };
 
 const getBybitDvol = async (symbol) => {
-  const start = Date.now();
   const req = await axios.get(
     `https://api.bybit.com/v5/market/historical-volatility?category=option&baseCoin=${symbol}&period=30`
   );
   try {
     const obj = req?.data;
     console.log(obj);
-    // console.log(obj);
-    // let dvol = obj?.result?.data[0];
-    // // console.log(dvol);
-    // dvol = dvol[dvol.length - 1];
-    // return dvol;
-    return obj.result[0].value;
+
+    return obj?.result[0].value;
   } catch (err) {
     console.log(err.data);
+    return null;
   }
 };
 
