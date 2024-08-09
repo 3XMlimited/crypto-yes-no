@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import OrderComponent from "@/components/OrderComponents";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -134,7 +135,15 @@ function TableDemo({ data, title, color, ab, post }) {
                   color === "green" ? "text-green-500" : "text-red-500"
                 } `}
               >
-                {(Number(d.price) * 100)?.toFixed(1)}
+                <OrderComponent
+                  description={`Trade  ${post.side}`}
+                  symbol={post.symbol}
+                  title={(Number(d.price) * 100)?.toFixed(1)}
+                  tokenID={post.side ? post?.ids[0] : post?.ids[1]}
+                  side={post.side}
+                  price={Number(d.price * 100)}
+                  // size={Number(d.size)}
+                />
               </p>
             </TableCell>
             <TableCell className="text-left w-[150px]">
@@ -419,6 +428,15 @@ const TableComponent = ({ index }) => {
           </div>
           {post?.symbol && (
             <div>
+              <div className="my-2">
+                <OrderComponent
+                  description={`Trade  ${post.side ? "YES" : "NO"}`}
+                  symbol={post.symbol}
+                  title="Buy / Sell"
+                  tokenID={post.side ? post.ids[0] : post.ids[1]}
+                  side={post.side}
+                />
+              </div>
               <div>
                 <div className="flex justify-between">
                   <div className=" bg-white shadow-md rounded-md p-5 md:w-18  w-24 xl:w-24">
