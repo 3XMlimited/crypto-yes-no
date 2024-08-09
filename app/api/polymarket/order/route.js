@@ -20,15 +20,13 @@ const createOrder = async (order) => {
   const chainId = 137;
   console.log(`Address: ${await Wallet.getAddress()}, chainId: ${chainId}`);
   const clobClient = new ClobClient(host, chainId, Wallet, creds);
-  // console.log(clobClient);
 
   console.log((order.price / 100).toFixed(2));
   let price = Number((order.price / 100).toFixed(2));
   if (price > 0.99) {
     price = 0.99;
   }
-  // const YES =
-  //   "77316104995725437081111737608694475714207012802290598663859834462864327272644";
+
   const orders = await clobClient.createOrder(
     {
       tokenID: order.tokenID,
